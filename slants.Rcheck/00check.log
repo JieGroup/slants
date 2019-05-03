@@ -1,0 +1,134 @@
+* using log directory ‘/Users/Jie/Desktop/TimeHunter/all-released-software/slants/slants.Rcheck’
+* using R version 3.5.1 (2018-07-02)
+* using platform: x86_64-apple-darwin15.6.0 (64-bit)
+* using session charset: UTF-8
+* using option ‘--as-cran’
+* checking for file ‘slants/DESCRIPTION’ ... OK
+* this is package ‘slants’ version ‘0.0.1’
+* package encoding: UTF-8
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Jie Ding <dingj@umn.edu>’
+
+New submission
+
+Package has a VignetteBuilder field but no prebuilt vignette index.
+
+The Description field should not start with the package name,
+  'This package' or similar.
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘slants’ can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking use of S3 registration ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+getPreprocess: no visible global function definition for ‘hasArg’
+getPreprocess: no visible binding for global variable ‘sd’
+getPreprocess: no visible binding for global variable ‘quantile’
+getSequentialNonlinearModel: no visible global function definition for
+  ‘hasArg’
+getSequentialNonlinearModel: no visible global function definition for
+  ‘rnorm’
+glasso_EM: no visible global function definition for ‘hasArg’
+glasso_EM: no visible global function definition for ‘plot’
+plotcoeff: no visible global function definition for ‘plot’
+plotcoeff: no visible global function definition for ‘lines’
+plotcoeff: no visible global function definition for ‘grid’
+plotcoeff: no visible global function definition for ‘legend’
+Undefined global functions or variables:
+  grid hasArg legend lines plot quantile rnorm sd
+Consider adding
+  importFrom("graphics", "grid", "legend", "lines", "plot")
+  importFrom("methods", "hasArg")
+  importFrom("stats", "quantile", "rnorm", "sd")
+to your NAMESPACE file (and ensure that your DESCRIPTION Imports field
+contains 'methods').
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... WARNING
+Documented arguments not in \usage in documentation object 'getRegressor':
+  ‘order’
+
+Undocumented arguments in documentation object 'getSequentialNonlinearModel'
+  ‘gamma_init’
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter ‘Writing R documentation files’ in the ‘Writing R
+Extensions’ manual.
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... WARNING
+Warning: parse error in file 'slants-Ex.R':
+1: unexpected '=='
+108: Ex1_result <- do.call(getSequentialNonlinearModel, c(list(ifPrint=TRUE, testSize=50),Ex1, Ex1_algo))
+109: ==
+     ^
+* checking files in ‘vignettes’ ... WARNING
+Files in the 'vignettes' directory but no files in 'inst/doc':
+  ‘reference.pdf’, ‘slants_user_guide.Rmd’, ‘slants_user_guide.pdf’
+Files named as vignettes but with no recognized vignette engine:
+   ‘vignettes/slants_user_guide.Rmd’
+(Is a VignetteBuilder field missing?)
+* checking examples ... ERROR
+Running examples in ‘slants-Ex.R’ failed
+The error most likely occurred in:
+
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: augknt
+> ### Title: augknt
+> ### Aliases: augknt
+> 
+> ### ** Examples
+> 
+> getRegressor()
+Error in getRegressor() : argument "x" is missing, with no default
+Execution halted
+* checking PDF version of manual ... WARNING
+LaTeX errors when creating PDF version.
+This typically indicates Rd problems.
+LaTeX errors found:
+! Package inputenc Error: Unicode char \u8:： not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+! Package inputenc Error: Unicode char \u8:： not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+! Package inputenc Error: Unicode char \u8:： not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+* checking PDF version of manual without hyperrefs or index ... ERROR
+* DONE
+Status: 2 ERRORs, 4 WARNINGs, 2 NOTEs
