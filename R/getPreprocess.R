@@ -43,9 +43,9 @@ getPreprocess <- function(X, L, order, nBspline, ...) {
   dots <- list(...)
 
   # if true, standardize the columns of X, default to TRUE
-  scaleFlag <- ifelse(hasArg(scaleFlag), dots$scaleFlag, TRUE)
+  scaleFlag <- ifelse(methods::hasArg(scaleFlag), dots$scaleFlag, TRUE)
   # if false, use linear regressor
-  augkntFlag <- ifelse(hasArg(augkntFlag), dots$augkntFlag, TRUE)
+  augkntFlag <- ifelse(methods::hasArg(augkntFlag), dots$augkntFlag, TRUE)
 
   ########################
   N <- nrow(X)
@@ -55,7 +55,7 @@ getPreprocess <- function(X, L, order, nBspline, ...) {
   x <- matrix(NA, nrow = D * L, ncol = N)
 
   if (scaleFlag) {
-    scale <- apply(X, 2, sd, na.rm = TRUE)
+    scale <- apply(X, 2, stats::sd, na.rm = TRUE)
   } else {
     scale <- rep(1, D)
   }
@@ -70,9 +70,9 @@ getPreprocess <- function(X, L, order, nBspline, ...) {
 
   ########################
   # determine the feasible box IN ORIGINAL SCALE---the region of X where the spline fit is very accurate
-  feasibleBox <- apply(X, 2, quantile, c(0.1,0.9), na.rm = TRUE)
+  feasibleBox <- apply(X, 2, stats::quantile, c(0.1,0.9), na.rm = TRUE)
   # determine the knot range IN RESCALED SCALE, which is slightly larger than feasibleBox in quantile
-  knotBox = apply(x[,1:D], 2, quantile, c(0.02,0.98), na.rm = TRUE)
+  knotBox = apply(x[,1:D], 2, stats::quantile, c(0.02,0.98), na.rm = TRUE)
 
   ########################
   # determine knots and spline basis

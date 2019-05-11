@@ -64,11 +64,11 @@ return(c(rep(pad, lag), ts[1:(length(ts)-lag)]))
 }
 # pack configurations so that it is easier to bundle things together
 Ex1 <- (function(N=2000, D=2, L=8, ifPlot = TRUE){
- err <- matrix(rnorm(D*(N+L)), N+L, D)
+ err <- matrix(stats::rnorm(D*(N+L)), N+L, D)
  X <- err[ ,1]
  X <- cbind(X, 0.5 * utils.lag(X,1)^2 - 0.8 * utils.lag(X,7) + 0.2 * err[,2])
  if (ifPlot) {
-   plot(X[,1], X[,2], pch = 16, cex = 0.5, col = "red")
+   graphics::plot(X[,1], X[,2], pch = 16, cex = 0.5, col = "red")
  }
  list(N=N, D=D, L=L, X=X[-(1:L),], y=X[-(1:L),2])
 })()
@@ -95,9 +95,9 @@ Ex1_algo <- c(Ex1_algo, do.call(getPreprocess, c(Ex1, Ex1_algo)))
 
 Ex1_result <- do.call(getSequentialNonlinearModel, c(list(ifPrint=1, testSize=50),Ex1, Ex1_algo))
 #========diagonistic========
-plot(Ex1_result$gamma_opt,type = "l")
-plot(Ex1_result$alpha_opt,type = "l",ylab = "Tao2")
-plot(Ex1_result$preErr[,2],type = "l")
+graphics::plot(Ex1_result$gamma_opt,type = "l")
+graphics::plot(Ex1_result$alpha_opt,type = "l",ylab = "Tao2")
+graphics::plot(Ex1_result$preErr[,2],type = "l")
 #get the historical opt beta, always the middle channel
 plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots,Ex1_algo$nBspline)
 }

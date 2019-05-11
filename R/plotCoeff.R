@@ -29,11 +29,11 @@ plotcoeff <- function(beta,knots,nBspline){
 
   }
 
-  plot(x, result[1,],ylim=c(-1,1),col = 1)
+  graphics::plot(x, result[1,],ylim=c(-1,1),col = 1)
   for (i in 2:DL){
-    lines(x, result[i,],col = i)
+    graphics::lines(x, result[i,],col = i)
   }
-  grid()
-  legend("topright",legend=rownames(result),lty=c(1,2,3),col=1:DL,cex = 0.5)
+  graphics::grid()
+  graphics::legend("topright",legend=rownames(result),lty=c(1,2,3),col=1:DL,cex = 0.5)
 
 }

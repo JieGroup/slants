@@ -47,11 +47,11 @@
 #'# pack configurations so that it is easier to bundle things together
 
 #'Ex1 <- (function(N=2000, D=2, L=8, ifPlot = TRUE){
-#'  err <- matrix(rnorm(D*(N+L)), N+L, D)
+#'  err <- matrix(stats::rnorm(D*(N+L)), N+L, D)
 #'  X <- err[ ,1]
 #'  X <- cbind(X, 0.5 * utils.lag(X,1)^2 - 0.8 * utils.lag(X,7) + 0.2 * err[,2])
 #'  if (ifPlot) {
-#'    plot(X[,1], X[,2], pch = 16, cex = 0.5, col = "red")
+#'    graphics::plot(X[,1], X[,2], pch = 16, cex = 0.5, col = "red")
 #'  }
 #'  list(N=N, D=D, L=L, X=X[-(1:L),], y=X[-(1:L),2])
 #'})()
@@ -78,9 +78,9 @@
 #'
 #'Ex1_result <- do.call(getSequentialNonlinearModel, c(list(ifPrint=1, testSize=50),Ex1, Ex1_algo))
 #'#========diagonistic========
-#'plot(Ex1_result$gamma_opt,type = "l")
-#'plot(Ex1_result$alpha_opt,type = "l",ylab = "Tao2")
-#'plot(Ex1_result$preErr[,2],type = "l")
+#'graphics::plot(Ex1_result$gamma_opt,type = "l")
+#'graphics::plot(Ex1_result$alpha_opt,type = "l",ylab = "Tao2")
+#'graphics::plot(Ex1_result$preErr[,2],type = "l")
 #'#get the historical opt beta, always the middle channel
 #'plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots,Ex1_algo$nBspline)
 
@@ -96,29 +96,29 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
 
   dots <- list(...)
 
-  spaTol_gamma <- ifelse(hasArg(spaTol_gamma), spaTol_gamma, 1.01)
+  spaTol_gamma <- ifelse(methods::hasArg(spaTol_gamma), spaTol_gamma, 1.01)
 
-  gamma_init <- ifelse(hasArg(gamma_init), gamma_init, 0.03)
+  gamma_init <- ifelse(methods::hasArg(gamma_init), gamma_init, 0.03)
 
-  alpha2_init <- ifelse(hasArg(alpha2_init), alpha2_init, 0.05)
+  alpha2_init <- ifelse(methods::hasArg(alpha2_init), alpha2_init, 0.05)
 
   # testSize is the number of obs to average prediction error, default is 50
-  testSize <- ifelse(hasArg(testSize), dots$testSize, 50)
+  testSize <- ifelse(methods::hasArg(testSize), dots$testSize, 50)
 
   # increase alpha2 if it idles for a while
-  tol_idle_alpha2 <- ifelse(hasArg(tol_idle_alpha2), dots$tol_idle_alpha2, 50)
+  tol_idle_alpha2 <- ifelse(methods::hasArg(tol_idle_alpha2), dots$tol_idle_alpha2, 50)
 
   # to adjust gamma before they get too crazy
-  safeShrink_gamma <- ifelse(hasArg(safeShrink_gamma), dots$safeShrink_gamma, 10^(0.4))
+  safeShrink_gamma <- ifelse(methods::hasArg(safeShrink_gamma), dots$safeShrink_gamma, 10^(0.4))
 
   # if coefficents are all 0 for too long time, shrink gamma
-  tol_all0times <- ifelse(hasArg(tol_all0times), dots$tol_all0times, 3)
+  tol_all0times <- ifelse(methods::hasArg(tol_all0times), dots$tol_all0times, 3)
 
   # how to shrink alpha2 if it's too big
-  shrinkAlpha2 <- ifelse(hasArg(shrinkAlpha2), dots$shrinkAlpha2, 1.1)
+  shrinkAlpha2 <- ifelse(methods::hasArg(shrinkAlpha2), dots$shrinkAlpha2, 1.1)
 
   # default: no print or plot
-  ifPrint <- ifelse(hasArg(ifPrint), dots$ifPrint, 0)
+  ifPrint <- ifelse(methods::hasArg(ifPrint), dots$ifPrint, 0)
 
   ########################
   # initialize
@@ -165,7 +165,7 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
       # initialize A and B and w
       X0[begin, ] <- getRegressor(x[begin,], dIndex, spconfig)
       reg <- X0[begin, ]
-      beta <- rep(0.1 * rnorm(L0), 3)
+      beta <- rep(0.1 * stats::rnorm(L0), 3)
       A = lambda[1] * reg %*% t(reg)
       B = lambda[1] * reg * y[begin]
 

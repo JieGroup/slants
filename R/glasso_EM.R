@@ -37,19 +37,19 @@ glasso_EM <- function(beta_init, A, B, ngroup, lambda, alpha2, ...) {
   dots <- list(...)
 
   # K is the number of iterations, exponential convergence, small value is sufficient
-  K <- ifelse(hasArg(K), dots$K, 20)
+  K <- ifelse(methods::hasArg(K), dots$K, 20)
 
   # tol_EM is the tolerance of EM convergence (whether explodes)
-  tol_EM <- ifelse(hasArg(tol_EM), dots$tol_EM, 100)
+  tol_EM <- ifelse(methods::hasArg(tol_EM), dots$tol_EM, 100)
 
   # eps_EM is the convergence criteria of EM
   # first component is the absolute change threshold
   # second component is the relative change threshold
-  eps_EM_abs <- ifelse(hasArg(eps_EM_abs), dots$eps_EM_abs, 1e-3)
-  eps_EM_rel <- ifelse(hasArg(eps_EM_rel), dots$eps_EM_rel, 1e-2)
+  eps_EM_abs <- ifelse(methods::hasArg(eps_EM_abs), dots$eps_EM_abs, 1e-3)
+  eps_EM_rel <- ifelse(methods::hasArg(eps_EM_rel), dots$eps_EM_rel, 1e-2)
 
   # default: no print or plot
-  ifPrint <- ifelse(hasArg(ifPrint), dots$ifPrint, 0)
+  ifPrint <- ifelse(methods::hasArg(ifPrint), dots$ifPrint, 0)
 
   ########################
   # total number of parameters and group size
@@ -100,7 +100,7 @@ glasso_EM <- function(beta_init, A, B, ngroup, lambda, alpha2, ...) {
 
   if (ifPrint>1) {
     # plot the history of first component
-    plot(beta_history[,1], main = "EM history of beta[1]", xlab = "Iteration", ylab = "beta[1]")
+    graphics::plot(beta_history[,1], main = "EM history of beta[1]", xlab = "Iteration", ylab = "beta[1]")
   }
 
   list(success = success, beta = beta)
