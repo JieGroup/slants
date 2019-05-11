@@ -20,7 +20,7 @@ To see the available function to use, type
 
 ls("package:slants")
 
-A quick guide of package can be found [here](https://github.com/JieGroup/slants/blob/master/vignettes/user-guide.pdf) 
+This open source project is still ongoing. A preliminary user guide of this package can be found [here](https://github.com/JieGroup/slants/blob/master/vignettes/user-guide.pdf) 
 
 
 ## Relevant Papers
