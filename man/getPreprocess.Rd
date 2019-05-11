@@ -35,6 +35,3 @@ a list including
 \description{
 This function preprocess the original data to get splines configuration and input data for b splines.
 }
-\examples{
-getPreprocess()
-}

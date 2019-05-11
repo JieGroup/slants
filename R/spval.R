@@ -6,8 +6,7 @@
 #' @param x knots
 #' @return regressor value
 #' @export
-#' @examples
-#' getRegressor()
+
 
 
 

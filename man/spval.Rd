@@ -17,6 +17,3 @@ regressor value
 \description{
 This function is to calculate single value of regressor
 }
-\examples{
-getRegressor()
-}

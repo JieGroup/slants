@@ -11,6 +11,8 @@
 #'   \item scaleFlag: boolean type,if true, standardize the columns of X, default to TRUE
 #'   \item augkntFlag:if false, use linear regressor, defaul to TRUE
 #' }
+#' @import stats
+#' @import methods
 #' @return a list including
 #'  \itemize{
 #'   \item x: reformed data
@@ -21,8 +23,7 @@
 #'   \item spconfig: splines configuration for b splines
 #' }
 #' @export
-#' @examples
-#' getPreprocess()
+
 
 
 getPreprocess <- function(X, L, order, nBspline, ...) {

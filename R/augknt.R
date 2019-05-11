@@ -6,8 +6,7 @@
 #' @param nBspline number of b splines
 #' @param order order of polynomial
 #' @export
-#' @examples
-#' getRegressor()
+
 
 augknt <- function(boundary, nBspline, order) {
   # return knots of length nBspline + order

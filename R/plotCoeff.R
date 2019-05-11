@@ -5,6 +5,7 @@
 #' @param beta optimal coefficients
 #' @param knots knots that returned from getPreprocess function
 #' @param nBspline the numbers of B splines that we need to fit model, also returned from getPreprocess function
+#' @import graphics
 #' @export
 #' @examples
 #' positive.polynomial(0.2,x = 0,k = 3,end_knot = 2,d=0)

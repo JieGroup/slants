@@ -4,16 +4,18 @@
 #'
 #' @param x input data, vector x
 #' @param d the index of which knots to look at
-#' @param order order of b splines.
 #' @param spconfig splines configuration
 #' @return a vector of regressor that will be passed to EM algorithm
 #' @export
 #' @examples
 #' x =  matrix(rnorm(2*(1000+8)),1000+8, 2)
+#' d = rep(1,length(x[,1]))
 #' knotBox = apply(x, 2, quantile, c(0.02,0.98), na.rm = TRUE)
+#' nBspline = 10
+#' order = 3
 #' knots = apply(knotBox, 2, augknt, nBspline, order)
 #' spconfig = list(order = 3, nBspline = 10, knots = knots,knotBox = knotBox)
-#' regressor <- getRegressor(x[,1],1,spconfig)
+#' regressor <- getRegressor(x[,1],d,spconfig)
 
 
 

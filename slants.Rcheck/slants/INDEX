@@ -1,9 +1,0 @@
-augknt                  augknt
-getPreprocess           get Preprocess
-getRegressor            get Regressor
-getSequentialNonlinearModel
-                        getSequentialNonlinearModel
-glasso_EM               glasso_EM
-plotcoeff               plotcoeff
-positive.polynomial     positive.polynomial
-spval                   divided difference

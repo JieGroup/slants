@@ -2,16 +2,16 @@ Package: slants
 Title: Sequential Adaptive Nonlinear Modeling of Time Series
 Version: 0.0.1
 Authors@R: c(
-    person("Jiaqi", "Liu", email = "liu00687@umn.edu", role = c("aut","trl")),
+    person("Jiaqi", "Liu", email = "liu00687@umn.edu", role = c("aut","trl”,"cre")),
     person("Rachit", "Jas", email = "jas00001@umn.edu", role = c("aut","trl")),
     person("Qiuyi", "Han", email = "hqychr@gmail.com", role = "aut"),
-    person("Jie", "Ding", email = "dingj@umn.edu", role = c("aut","cre")))
-Description: SLANTS is a new method for online modeling and prediction of nonlinear autoregressive time sereis. It uses splines to approximate a wide range of nonlinear functions. It can be applied to high dimensional time series where the dimension is larger than the sample size.
+    person("Jie", "Ding", email = "dingj@umn.edu", role = c("aut")))
+Description: It provides a new method for online modeling and prediction of nonlinear and nonparametric autoregressive time series. It uses splines to approximate a wide range of nonlinear functions and adaptive filtering to accommodate time varying data generating processes. It is built on a new online group LASSO algorithm proposed in the reference paper. It can be applied to high dimensional time series where the dimension is larger than the sample size. 
 Depends: R (>= 3.5.0)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: matrixStats (>= 0.54.0), MASS (>= 7.3.5), ncvreg (>= 3.11.0), stats (>= 3.5.1), graphics (>= 3.5.1)
+Imports: stats (>= 3.5.1)
 RoxygenNote: 6.1.1.9000
 Suggests: 
     knitr,

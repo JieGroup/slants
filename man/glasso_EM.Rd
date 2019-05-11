@@ -27,6 +27,3 @@ a list of whether success and the updated coefficients
 \description{
 This function is to implement the em algorithm for group lasso
 }
-\examples{
-getRegressor()
-}

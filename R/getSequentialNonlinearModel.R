@@ -7,6 +7,7 @@
 #' @param D columns of original X
 #' @param L maximize lag number
 #' @param lambda the LASSO penalty
+#' @param gamma_init the initial value for gamma
 #' @param alpha2_init the initial value of EM decomposition parameter, refer to the paper
 #' @param spconfig spline configuration
 #' @param moveSize multipler to move among channels
@@ -30,6 +31,9 @@
 #'   \item beta_opt: best coefficient, the last row and the second channel related in beta_history
 #'   \item beta_history: all stored coefficient.
 #' }
+#' @import stats
+#' @import methods
+#' @import graphics
 #' @export
 #' @description This model is used to fit sequential non linear time series data. Detailed information could be find in the paper \url{http://jding.org/jie-uploads/2018/11/slant.pdf}
 #' @seealso \code{\link{glasso_EM}} for implementation of EM algorithm; \code{\link{getPreprocess}};\code{\link{getRegressor}}
@@ -72,28 +76,13 @@
 #'
 #'Ex1_algo <- c(Ex1_algo, do.call(getPreprocess, c(Ex1, Ex1_algo)))
 #'
-#'Ex1_result <- do.call(getSequentialNonlinearModel, c(list(ifPrint=TRUE, testSize=50),Ex1, Ex1_algo))
-#'========diagonistic========
+#'Ex1_result <- do.call(getSequentialNonlinearModel, c(list(ifPrint=1, testSize=50),Ex1, Ex1_algo))
+#'#========diagonistic========
 #'plot(Ex1_result$gamma_opt,type = "l")
 #'plot(Ex1_result$alpha_opt,type = "l",ylab = "Tao2")
 #'plot(Ex1_result$preErr[,2],type = "l")
 #'#get the historical opt beta, always the middle channel
-#'beta_hist_opt <- Ex1_result$beta_history[,161:320]
-#'
-#'order <- 3
-#'knots <- Ex1_algo$knots[,1]
-#'for (t in length(beta_hist)){
-#'tmp <- NULL
-#'for (i in 1:(length(knots)-order)) {
-#'  tmp <- cbind(tmp, sapply(seq(-1,1,by=0.01), spval, x=knots[i:(i+order)]))
-#'}
-#'par(mfrow = c(1,2))
-#'plot(seq(-1,1,by=0.01), tmp %*% beta_hist_opt[t,1:10])
-#'plot(seq(-1,1,by=0.01), tmp %*% beta_hist_opt[t,121:130])
-#'par(mfrow=c(1,1))
-#'}
-
-#'
+#'plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots,Ex1_algo$nBspline)
 
 
 
@@ -106,6 +95,12 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
 
 
   dots <- list(...)
+
+  spaTol_gamma <- ifelse(hasArg(spaTol_gamma), spaTol_gamma, 1.01)
+
+  gamma_init <- ifelse(hasArg(gamma_init), gamma_init, 0.03)
+
+  alpha2_init <- ifelse(hasArg(alpha2_init), alpha2_init, 0.05)
 
   # testSize is the number of obs to average prediction error, default is 50
   testSize <- ifelse(hasArg(testSize), dots$testSize, 50)

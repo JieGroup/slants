@@ -18,6 +18,8 @@ getSequentialNonlinearModel(y, x, D, L, lambda, gamma_init, alpha2_init,
 
 \item{lambda}{the LASSO penalty}
 
+\item{gamma_init}{the initial value for gamma}
+
 \item{alpha2_init}{the initial value of EM decomposition parameter, refer to the paper}
 
 \item{spconfig}{spline configuration}
@@ -91,27 +93,13 @@ list(
 
 Ex1_algo <- c(Ex1_algo, do.call(getPreprocess, c(Ex1, Ex1_algo)))
 
-Ex1_result <- do.call(getSequentialNonlinearModel, c(list(ifPrint=TRUE, testSize=50),Ex1, Ex1_algo))
-========diagonistic========
+Ex1_result <- do.call(getSequentialNonlinearModel, c(list(ifPrint=1, testSize=50),Ex1, Ex1_algo))
+#========diagonistic========
 plot(Ex1_result$gamma_opt,type = "l")
 plot(Ex1_result$alpha_opt,type = "l",ylab = "Tao2")
 plot(Ex1_result$preErr[,2],type = "l")
 #get the historical opt beta, always the middle channel
-beta_hist_opt <- Ex1_result$beta_history[,161:320]
-
-order <- 3
-knots <- Ex1_algo$knots[,1]
-for (t in length(beta_hist)){
-tmp <- NULL
-for (i in 1:(length(knots)-order)) {
- tmp <- cbind(tmp, sapply(seq(-1,1,by=0.01), spval, x=knots[i:(i+order)]))
-}
-par(mfrow = c(1,2))
-plot(seq(-1,1,by=0.01), tmp \%*\% beta_hist_opt[t,1:10])
-plot(seq(-1,1,by=0.01), tmp \%*\% beta_hist_opt[t,121:130])
-par(mfrow=c(1,1))
-}
-
+plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots,Ex1_algo$nBspline)
 }
 \seealso{
 \code{\link{glasso_EM}} for implementation of EM algorithm; \code{\link{getPreprocess}};\code{\link{getRegressor}}

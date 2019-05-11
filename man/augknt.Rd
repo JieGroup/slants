@@ -16,6 +16,3 @@ augknt(boundary, nBspline, order)
 \description{
 This function is to find the knot
 }
-\examples{
-getRegressor()
-}

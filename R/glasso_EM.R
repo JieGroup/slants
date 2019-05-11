@@ -9,10 +9,11 @@
 #' @param lambda the LASSO penalty
 #' @param alpha2 the EM decomposition parameter, refer to the paper
 #' @param ... default parameters
+#' @import methods
+#' @import graphics
 #' @return a list of whether success and the updated coefficients
 #' @export
-#' @examples
-#' getRegressor()
+
 
 
 
