@@ -2,7 +2,7 @@ Package: slants
 Title: Sequential Adaptive Nonlinear Modeling of Time Series
 Version: 0.0.1
 Authors@R: c(
-    person("Jiaqi", "Liu", email = "liu00687@umn.edu", role = c("aut","trl”,"cre")),
+    person("Jiaqi", "Liu", email = "liu00687@umn.edu", role = c("aut","trl",”cre")),
     person("Rachit", "Jas", email = "jas00001@umn.edu", role = c("aut","trl")),
     person("Qiuyi", "Han", email = "hqychr@gmail.com", role = "aut"),
     person("Jie", "Ding", email = "dingj@umn.edu", role = c("aut")))
