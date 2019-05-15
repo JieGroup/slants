@@ -25,10 +25,10 @@ getPreprocess(X, L, order, nBspline, ...)
 a list including
  \itemize{
   \item x: reformed data
-  \item scale : standard deviation for original input
-  \item feasibleBox : the region of X where the spline fit is very accurate
+  \item scale: standard deviation for original input
+  \item feasibleBox: the region of X where the spline fit is very accurate
   \item knotBox: determine the knot range IN RESCALED SCALE, which is slightly larger than feasibleBox in quantile
-  \item knots ：knots
+  \item knots: knots
   \item spconfig: splines configuration for b splines
 }
 }
