@@ -19,7 +19,7 @@
 #'   \item tol_idle_alpha2:increase alpha2 if it idles for a while
 #'   \item safeShrink_gamma : adjust gamma before they get too crazy
 #'   \item tol_all0times: if coefficents are all 0 for too long time, shrink gamma
-#'   \item shrinkAlpha2 ：how to shrink alpha2 if it's too big
+#'   \item shrinkAlpha2
 #' }
 #' @return a list including
 #'  \itemize{
@@ -27,7 +27,7 @@
 #'   \item predict1 : historical predicted values, firt column indicates the first channel, etc.
 #'   \item gamma_history : historical gamma channels, first channel is the smallest one and the third channel is the largest one.
 #'   \item gamma_opt: optimized gamma, the second channel in gamma_history
-#'   \item alpha_opt ：optimized alpha.
+#'   \item alpha_opt: optimized alpha
 #'   \item beta_opt: best coefficient, the last row and the second channel related in beta_history
 #'   \item beta_history: all stored coefficient.
 #' }
@@ -74,9 +74,9 @@
 #' )
 #' })(Ex1)
 #'
-#'Ex1_algo <- c(Ex1_algo, do.call(getPreprocess, c(Ex1, Ex1_algo)))
-#'
-#'Ex1_result <- do.call(getSequentialNonlinearModel, c(list(ifPrint=1, testSize=50),Ex1, Ex1_algo))
+#'Ex1_algo <- c(Ex1_algo, do.call(getPreprocess, c(Ex1,Ex1_algo)))
+#'par <- c(list(ifPrint=1,testSize=50),Ex1,Ex1_algo)
+#'Ex1_result <- do.call(getSequentialNonlinearModel, par)
 #'#========diagonistic========
 #'graphics::plot(Ex1_result$gamma_opt,type = "l")
 #'graphics::plot(Ex1_result$alpha_opt,type = "l",ylab = "Tao2")
@@ -114,7 +114,7 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
   # if coefficents are all 0 for too long time, shrink gamma
   tol_all0times <- ifelse(methods::hasArg(tol_all0times), dots$tol_all0times, 3)
 
-  # how to shrink alpha2 if it's too big
+
   shrinkAlpha2 <- ifelse(methods::hasArg(shrinkAlpha2), dots$shrinkAlpha2, 1.1)
 
   # default: no print or plot
