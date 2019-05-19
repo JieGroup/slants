@@ -19,7 +19,7 @@
 #'   \item tol_idle_alpha2:increase alpha2 if it idles for a while
 #'   \item safeShrink_gamma : adjust gamma before they get too crazy
 #'   \item tol_all0times: if coefficents are all 0 for too long time, shrink gamma
-#'   \item shrinkAlpha2
+#'   \item shrinkAlpha2: how to shrink alpha2
 #' }
 #' @return a list including
 #'  \itemize{
@@ -198,7 +198,7 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
 
       # compute the prediction error
       for (c in 1:3) {
-        predict1[n,c] = mY + sum(reg * beta[((c-1)*P+1):(c*P)])
+        predict1[n,c] = mY + sum(reg * beta[((c-1)*L0+1):(c*L0)])
         preErr[n,c] = (y[n] - predict1[n,c])^2
       }
 
