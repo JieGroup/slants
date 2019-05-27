@@ -14,5 +14,5 @@ augknt(boundary, nBspline, order)
 \item{order}{order of polynomial}
 }
 \description{
-This function is to find the knot
+This function is to find knots
 }

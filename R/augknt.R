@@ -1,6 +1,6 @@
 #' augknt
 #'
-#' This function is to find the knot
+#' This function is to find knots
 #'
 #' @param boundary boundary of knots
 #' @param nBspline number of b splines

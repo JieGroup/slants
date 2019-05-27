@@ -1,6 +1,6 @@
-#' getSequentialNonlinearModel
+#' onlineModel
 #'
-#' This function is to fit seqential non linear model
+#' This function is for online streaming data
 #'
 #' @param y vector
 #' @param x the reuslt from getPreprocess \code{x}
@@ -38,87 +38,43 @@
 #' @description This model is used to fit sequential non linear time series data. Detailed information could be find in the paper \url{http://jding.org/jie-uploads/2018/11/slant.pdf}
 #' @seealso \code{\link{glasso_EM}} for implementation of EM algorithm; \code{\link{getPreprocess}};\code{\link{getRegressor}}
 #' @keywords  sequential non linear time series model
-#' @examples
-#' utils.lag <- function(ts, lag = 1, pad = NA) {
-#' # return the lagged version of a time series vector
-#' return(c(rep(pad, lag), ts[1:(length(ts)-lag)]))
-#' }
-
-#'# pack configurations so that it is easier to bundle things together
-
-#'Ex1 <- (function(N=2000, D=2, L=8, ifPlot = TRUE){
-#'  err <- matrix(stats::rnorm(D*(N+L)), N+L, D)
-#'  X <- err[ ,1]
-#'  X <- cbind(X, 0.5 * utils.lag(X,1)^2 - 0.8 * utils.lag(X,7) + 0.2 * err[,2])
-#'  if (ifPlot) {
-#'    graphics::plot(X[,1], X[,2], pch = 16, cex = 0.5, col = "red")
-#'  }
-#'  list(N=N, D=D, L=L, X=X[-(1:L),], y=X[-(1:L),2])
-#'})()
-#'
-#'Ex1_algo <- (function(experiment_config){
-#' ec <- experiment_config # short name
-#' lambda <- 1/c(1:ec$N) # same as batch
-#' shrinkStepSize <- 1/c(1:ec$N)
-#' list(
-#'   order = 3,
-#'   nBspline = 10,
-#'   lambda = lambda,
-#'   shrinkStepSize = shrinkStepSize,
-#'   # if the performance does not exceed this ratio, the sparser (larger gamma) is preferred
-#'   spaTol_gamma = 1.01,
-#'   moveSize = 10^(0.4), # multipler to move among channels
-#'  safeShrink_gamma = 10^(0.1), # to adjust gamma before they get too crazy
-#'   gamma_init = 0.01,
-#'   alpha2_init = 0.05
-#' )
-#' })(Ex1)
-#'
-#'Ex1_algo <- c(Ex1_algo, do.call(getPreprocess, c(Ex1,Ex1_algo)))
-#'par <- c(list(ifPrint=1,testSize=50),Ex1,Ex1_algo)
-#'Ex1_result <- do.call(getSequentialNonlinearModel, par)
-#'#========diagonistic========
-#'graphics::plot(Ex1_result$gamma_opt,type = "l")
-#'graphics::plot(Ex1_result$alpha_opt,type = "l",ylab = "Tao2")
-#'graphics::plot(Ex1_result$preErr[,2],type = "l")
-#'#get the historical opt beta, always the middle channel
-#'plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots,Ex1_algo$nBspline)
 
 
 
-getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_init, spconfig, spaTol_gamma, shrinkStepSize, moveSize, ...) {
-
-
+onlineModel <- function(y, x, D, L, lambda, gamma_init, alpha2_init,spconfig,
+                        spaTol_gamma, shrinkStepSize, moveSize, ...) {
+  ###
+  # moveSize is the ratio between gamma channels
+  # spaTol_gamma is to favor larger gamma within spaTol_c tolerance
+  # rejuvenate to the last point we move gamma based on prediction error
+  # TODO: indicate and record which channel is best
+  ###
 
   ########################
   # set default parameters
 
+  #browser()
 
   dots <- list(...)
 
-  spaTol_gamma <- ifelse(methods::hasArg(spaTol_gamma), spaTol_gamma, 1.01)
-
-  gamma_init <- ifelse(methods::hasArg(gamma_init), gamma_init, 0.03)
-
-  alpha2_init <- ifelse(methods::hasArg(alpha2_init), alpha2_init, 0.05)
-
   # testSize is the number of obs to average prediction error, default is 50
-  testSize <- ifelse(methods::hasArg(testSize), dots$testSize, 50)
+  testSize <- ifelse(hasArg(testSize), dots$testSize, 50)
 
   # increase alpha2 if it idles for a while
-  tol_idle_alpha2 <- ifelse(methods::hasArg(tol_idle_alpha2), dots$tol_idle_alpha2, 50)
+  tol_idle_alpha2 <- ifelse(hasArg(tol_idle_alpha2), dots$tol_idle_alpha2, 50)
 
   # to adjust gamma before they get too crazy
-  safeShrink_gamma <- ifelse(methods::hasArg(safeShrink_gamma), dots$safeShrink_gamma, 10^(0.4))
+  safeShrink_gamma <- ifelse(hasArg(safeShrink_gamma), dots$safeShrink_gamma, 10^(0.4))
 
   # if coefficents are all 0 for too long time, shrink gamma
-  tol_all0times <- ifelse(methods::hasArg(tol_all0times), dots$tol_all0times, 3)
+  tol_all0times <- ifelse(hasArg(tol_all0times), dots$tol_all0times, 3)
 
-
-  shrinkAlpha2 <- ifelse(methods::hasArg(shrinkAlpha2), dots$shrinkAlpha2, 1.1)
+  # how to shrink alpha2 if it's too big
+  shrinkAlpha2 <- ifelse(hasArg(shrinkAlpha2), dots$shrinkAlpha2, 1.1)
 
   # default: no print or plot
-  ifPrint <- ifelse(methods::hasArg(ifPrint), dots$ifPrint, 0)
+  ifPrint <- ifelse(hasArg(ifPrint), dots$ifPrint, 0)
+
 
   ########################
   # initialize
@@ -127,23 +83,47 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
   x <- x[-(1:L),]
   P <- D*L
   L0 <- P * spconfig$nBspline
-  dIndex <- rep(1:D, L)
+  dIndex <- rep(1:D, L) #same length with x
 
 
+  if(file.exists("result.RDS")){
+    history <- readRDS("result.RDS")
 
+  }else {
+    history <- getSequentialNonlinearModel(y,x,D,L,lambda, gamma_init, alpha2_init, spconfig,
+                                           spaTol_gamma, shrinkStepSize, moveSize)
+    return(history)
+  }
+
+  length1 <- dim(history$beta_history)[1]
+  beta <- history$beta_history[length1,]
+  hist_spconfig <- history$spconfig
+  len <- length(beta)
+  A = history$A
+  B = history$B
+
+  if(length(x[1,]) != len/(hist_spconfig$nBspline*3)){
+    print('input values need to be preprocessed first!')
+  }
 
   gammas <- c(1/moveSize, 1, moveSize) * gamma_init
   alpha2 <- alpha2_init
 
   #add optimal return result
-  gamma_opt <- rep(gamma_init ,N)
-  alpha2_opt <- rep(alpha2_init ,N)
+  gamma_opt <- rep(gamma_init ,N+length1)
+  alpha2_opt <- rep(alpha2_init ,N+length1)
 
   X0 <- matrix(NA, nrow = N, ncol = L0)
-  beta_history <- matrix(NA, nrow = N, ncol = 3 * L0)
-  predict1 <- matrix(NA, nrow = N, ncol = 3)
-  preErr <- matrix(NA, nrow = N, ncol = 3)
-  gamma_history <- matrix(NA, nrow = N, ncol = 3)
+  beta_history <- matrix(NA, nrow = N+length1, ncol = 3 * L0)
+  beta_history[1:length1,] <- history$beta_history
+  predict1 <- matrix(NA, nrow = N+length1, ncol = 3)
+  predict1[1:length1,] <- history$predict1
+  preErr <- matrix(NA, nrow = N+length1, ncol = 3)
+  preErr[1:length1,] <- history$preErr
+  gamma_history <- matrix(NA, nrow = N+length1, ncol = 3)
+  gamma_history[1:length1,] <- history$gamma_history
+
+
 
   # maintain index begin as the current beginning row index after dead loop happens
   begin <- n <- 1
@@ -162,17 +142,7 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
       ###################################
       # Initial Stage
 
-      # initialize A and B and w
-      X0[begin, ] <- getRegressor(x[begin,], dIndex, spconfig)
-      reg <- X0[begin, ]
-      beta <- rep(0.1 * stats::rnorm(L0), 3)
-      A = lambda[1] * reg %*% t(reg)
-      B = lambda[1] * reg * y[begin]
 
-      alpha2 = 0.5 / eigen(A)$values[1] # prevent EM blow up
-
-      # record beta
-      beta_history[begin, ] <- beta
 
       # initialize control parameter
       prepareTime <- 1 * testSize # count time (decreasing), get ready for next comparison when <= 0
@@ -184,13 +154,23 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
       A_rejuvenate <- A # TODO: seems to me problematic because it does not match with n_rejuvenate
       B_rejuvenate <- B
 
+      for (c in 1:3) {
+        predict1[n+length1,c] = predict1[length1,c]
+        preErr[n+length1,c] = preErr[length1,c]
+      }
+
+
+
+
+
     } else {
       ###################################
       # Usual Stage
       prepareTime = prepareTime - 1
 
       #compute new reg and update the mean of X, Y
-      X0[n, ] = getRegressor(x[n,], dIndex, spconfig)
+
+      X0[n, ] = getRegressor(x[n,], dIndex, spconfig) #length of X0: nBspline * length of x
       mX = colMeans(X0[1:n,], na.rm = TRUE)
       mY = mean(y[1:n])
 
@@ -198,8 +178,8 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
 
       # compute the prediction error
       for (c in 1:3) {
-        predict1[n,c] = mY + sum(reg * beta[((c-1)*L0+1):(c*L0)])
-        preErr[n,c] = (y[n] - predict1[n,c])^2
+        predict1[n+length1,c] = mY + sum(reg * beta[((c-1)*L0+1):(c*L0)])
+        preErr[n+length1,c] = (y[n] - predict1[n,c])^2
       }
 
       # update sufficient statistics
@@ -221,7 +201,7 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
 
       # force gammas to reduce if the smallest gamma still produce all zero
       # estimates, begin after large n in order to avoid initialization issue
-      if (n - begin > testSize && sum(sum(abs(beta_history[(n-tol_all0times):(n-1), 1:L0]))) == 0) {
+      if (n - begin > testSize && !any(as.logical(beta_history[(n-tol_all0times):n, 1:L0]))) {
         # if the smallest penalty produces all zero
         current_safeShrink_gamma = 1 + shrinkStepSize[n_move_gamma]/shrinkStepSize[1] * (safeShrink_gamma-1)
         gammas = gammas / current_safeShrink_gamma
@@ -315,19 +295,23 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
 
 
     }
-    gamma_opt[n] <- gammas[2]
-    alpha2_opt[n] <- alpha2
-    gamma_history[n, ] <- gammas
-    beta_opt <- beta_history[n,(L0+1):(2*L0)]
+    gamma_opt[len+n] <- gammas[2]
+    alpha2_opt[len+n] <- alpha2
+    gamma_history[len+n, ] <- gammas
+    beta_opt <- beta_history[len+n,(L0+1):(2*L0)]
     n <- n + 1
   }
 
   print('==========getSequentialNonlinearModel finished=============')
   # TODO: currently I do not output optimal information as in Matlab code. Done
-  list(mY=mY, beta_history = beta_history,
-       preErr = preErr, predict1 = predict1,
-       gamma_history = gamma_history,
-       gamma_opt = gamma_opt,
-       alpha_opt = alpha2_opt,
-       beta_opt = beta_opt)
+  result = list(beta=beta, mY=mY, beta_history = beta_history,
+                preErr = preErr, predict1 = predict1,
+                gamma_history = gamma_history,
+                gamma_opt = gamma_opt,
+                alpha_opt = alpha2_opt,
+                beta_opt = beta_opt,
+                spconfig = spconfig,A = A,B = B)
+  saveRDS(result,"result.RDS")
+  return(result)
 }
+
