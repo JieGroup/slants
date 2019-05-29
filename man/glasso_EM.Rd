@@ -27,3 +27,13 @@ a list of whether success and the updated coefficients
 \description{
 This function is to implement the em algorithm for group lasso
 }
+\examples{
+beta = matrix(c(1,2,3))
+B = matrix(c(1,2,3))
+A = matrix(rep(c(1,2,3),3),nrow = 3,byrow = TRUE)
+ngroup = 3
+lambda = 0.05
+alpha2 = 0.05
+out = glasso_EM(beta,A,B,ngroup,lambda,alpha2)
+
+}
