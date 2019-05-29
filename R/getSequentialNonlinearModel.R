@@ -324,10 +324,14 @@ getSequentialNonlinearModel <- function(y, x, D, L, lambda, gamma_init, alpha2_i
 
   print('==========getSequentialNonlinearModel finished=============')
   # TODO: currently I do not output optimal information as in Matlab code. Done
-  list(mY=mY, beta_history = beta_history,
-       preErr = preErr, predict1 = predict1,
-       gamma_history = gamma_history,
-       gamma_opt = gamma_opt,
-       alpha_opt = alpha2_opt,
-       beta_opt = beta_opt)
+  result = list(beta=beta, mY=mY, beta_history = beta_history,
+                preErr = preErr, predict1 = predict1,
+                gamma_history = gamma_history,
+                gamma_opt = gamma_opt,
+                alpha_opt = alpha2_opt,
+                beta_opt = beta_opt,
+                spconfig = spconfig,
+                A = A,B = B)
+  saveRDS(result,"result.RDS")
+  return(result)
 }
