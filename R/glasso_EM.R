@@ -13,6 +13,15 @@
 #' @import graphics
 #' @return a list of whether success and the updated coefficients
 #' @export
+#' @examples
+#' beta = matrix(c(1,2,3))
+#' B = matrix(c(1,2,3))
+#' A = matrix(rep(c(1,2,3),3),nrow = 3,byrow = TRUE)
+#' ngroup = 3
+#' lambda = 0.05
+#' alpha2 = 0.05
+#' out = glasso_EM(beta,A,B,ngroup,lambda,alpha2)
+#'
 
 
 
@@ -39,8 +48,8 @@ glasso_EM <- function(beta_init, A, B, ngroup, lambda, alpha2, ...) {
   # K is the number of iterations, exponential convergence, small value is sufficient
   K <- ifelse(methods::hasArg(K), dots$K, 20)
 
-  # tol_EM is the tolerance of EM convergence (whether explodes)
-  tol_EM <- ifelse(methods::hasArg(tol_EM), dots$tol_EM, 100)
+  # tolerance.EM is the tolerance of EM convergence (whether explodes)
+  tolerance.EM <- ifelse(methods::hasArg(tolerance.EM), dots$tolerance.EM, 100)
 
   # eps_EM is the convergence criteria of EM
   # first component is the absolute change threshold
@@ -91,7 +100,7 @@ glasso_EM <- function(beta_init, A, B, ngroup, lambda, alpha2, ...) {
 
   ########################
   # post processing, check convergence
-  if (sum(abs(beta_init))>0 && sum(abs(beta-beta_init)) > tol_EM * sum(abs(beta_init))) {
+  if (sum(abs(beta_init))>0 && sum(abs(beta-beta_init)) > tolerance.EM * sum(abs(beta_init))) {
     success <- FALSE
     print(sprintf("EM blow up with rate %.4ef", sum(abs(beta-beta_init))/sum(abs(beta_init))))
   } else {

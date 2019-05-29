@@ -29,7 +29,7 @@ plotcoeff <- function(beta,knots,nBspline){
 
   }
 
-  graphics::plot(x, result[1,],ylim=c(-1,1),col = 1)
+  graphics::plot(x, result[1,],ylim=c(-1,1),col = 1,ylab = "Y")
   for (i in 2:DL){
     graphics::lines(x, result[i,],col = i)
   }
