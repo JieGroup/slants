@@ -16,13 +16,33 @@
 #' @return a list including
 #'  \itemize{
 #'   \item x: reformed data
-#'   \item scale : standard deviation for original input
-#'   \item feasibleBox : the region of X where the spline fit is very accurate
+#'   \item scale: standard deviation for original input
+#'   \item feasibleBox: the region of X where the spline fit is very accurate
 #'   \item knotBox: determine the knot range IN RESCALED SCALE, which is slightly larger than feasibleBox in quantile
-#'   \item knots ：knots
+#'   \item knots: knots
 #'   \item spconfig: splines configuration for b splines
 #' }
 #' @export
+#' @examples
+#' utils.lag <- function(ts, lag = 1, pad = NA) {
+#' # return the lagged version of a time series vector
+#' return(c(rep(pad, lag), ts[1:(length(ts)-lag)]))
+#' }
+
+#'# pack configurations so that it is easier to bundle things together
+#'
+#' # Suppose that there is no historical data. In this situation, onlineModel has the same function as getSequentialNonlinearModel
+#'Ex1 <- (function(N=2000, D=2, L=8, ifPlot = TRUE){
+#'  err <- matrix(stats::rnorm(D*(N+L)), N+L, D)
+#'  X <- err[ ,1]
+#'  X <- cbind(X, 0.5 * utils.lag(X,1)^2 - 0.8 * utils.lag(X,7) + 0.2 * err[,2])
+#'  if (ifPlot) {
+#'    graphics::plot(X[,1], X[,2], pch = 16, cex = 0.5, col = "red")
+#'  }
+#'  list(N=N, D=D, L=L, X=X[-(1:L),], y=X[-(1:L),2])
+#'})()
+#'par <- c(order = 3, nBspline = 10)
+#'result <- do.call(getPreprocess, c(Ex1,par))
 
 
 

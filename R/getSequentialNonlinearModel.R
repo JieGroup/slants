@@ -82,7 +82,7 @@
 #'graphics::plot(Ex1_result$alpha_opt,type = "l",ylab = "Tao2")
 #'graphics::plot(Ex1_result$preErr[,2],type = "l")
 #'#get the historical opt beta, always the middle channel
-#'plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots,Ex1_algo$nBspline)
+#'plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots[,1],Ex1_algo$spconfig$nBspline,Ex1_algo$spconfig$order)
 
 
 

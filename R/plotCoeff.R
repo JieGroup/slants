@@ -3,18 +3,21 @@
 #' This function is to plot the coefficient
 #'
 #' @param beta optimal coefficients
-#' @param knots knots that returned from getPreprocess function
+#' @param knots first column of knots that returned from getPreprocess function, generated from original scale
 #' @param nBspline the numbers of B splines that we need to fit model, also returned from getPreprocess function
+#' @param order the order of b splines
 #' @import graphics
 #' @export
 #' @examples
-#' positive.polynomial(0.2,x = 0,k = 3,end_knot = 2,d=0)
+#' beta = c(rep(1,10),rep(0,140),rep(-1,10))
+#' knots = c(0.1,0.1,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.8,0.8,0.8)
+#' nBspline = 10
+#' order = 3
+#' plotcoeff(beta,knots,nBspline,order)
 
-plotcoeff <- function(beta,knots,nBspline){
-  knots <- knots[,1]
+plotcoeff <- function(beta,knots,nBspline,order){
   D <- length(knots)
   DL <- length(beta)/nBspline
-  order <- 3
   x <- seq(-1,1,by=0.01)
   tmp <- NULL
 

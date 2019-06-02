@@ -6,6 +6,11 @@
 #' @param x knots
 #' @return regressor value
 #' @export
+#' @examples
+#' knots = c(0,0,0,0.1)
+#' input = 0.02
+#' result = spval(input,knots)
+#'
 
 
 
