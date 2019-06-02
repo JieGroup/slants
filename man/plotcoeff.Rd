@@ -4,18 +4,24 @@
 \alias{plotcoeff}
 \title{plotcoeff}
 \usage{
-plotcoeff(beta, knots, nBspline)
+plotcoeff(beta, knots, nBspline, order)
 }
 \arguments{
 \item{beta}{optimal coefficients}
 
-\item{knots}{knots that returned from getPreprocess function}
+\item{knots}{first column of knots that returned from getPreprocess function, generated from original scale}
 
 \item{nBspline}{the numbers of B splines that we need to fit model, also returned from getPreprocess function}
+
+\item{order}{the order of b splines}
 }
 \description{
 This function is to plot the coefficient
 }
 \examples{
-positive.polynomial(0.2,x = 0,k = 3,end_knot = 2,d=0)
+beta = c(rep(1,10),rep(0,140),rep(-1,10))
+knots = c(0.1,0.1,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.8,0.8,0.8)
+nBspline = 10
+order = 3
+plotcoeff(beta,knots,nBspline,order)
 }

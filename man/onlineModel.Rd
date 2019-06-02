@@ -57,6 +57,73 @@ This model is used to fit sequential non linear time series data. Detailed infor
 \details{
 This function is for online streaming data
 }
+\examples{
+utils.lag <- function(ts, lag = 1, pad = NA) {
+# return the lagged version of a time series vector
+return(c(rep(pad, lag), ts[1:(length(ts)-lag)]))
+}
+# pack configurations so that it is easier to bundle things together
+
+# Suppose that there is no historical data. In this situation, onlineModel has the same function as getSequentialNonlinearModel
+Ex1 <- (function(N=2000, D=2, L=8, ifPlot = TRUE){
+ err <- matrix(stats::rnorm(D*(N+L)), N+L, D)
+ X <- err[ ,1]
+ X <- cbind(X, 0.5 * utils.lag(X,1)^2 - 0.8 * utils.lag(X,7) + 0.2 * err[,2])
+ if (ifPlot) {
+   graphics::plot(X[,1], X[,2], pch = 16, cex = 0.5, col = "red")
+ }
+ list(N=N, D=D, L=L, X=X[-(1:L),], y=X[-(1:L),2])
+})()
+
+Ex1_algo <- (function(experiment_config){
+ec <- experiment_config # short name
+lambda <- 1/c(1:ec$N) # same as batch
+shrinkStepSize <- 1/c(1:ec$N)
+list(
+  order = 3,
+  nBspline = 10,
+  lambda = lambda,
+  shrinkStepSize = shrinkStepSize,
+  # if the performance does not exceed this ratio, the sparser (larger gamma) is preferred
+  spaTol_gamma = 1.01,
+  moveSize = 10^(0.4), # multipler to move among channels
+ safeShrink_gamma = 10^(0.1), # to adjust gamma before they get too crazy
+  gamma_init = 0.01,
+  alpha2_init = 0.05
+)
+})(Ex1)
+
+Ex1_algo <- c(Ex1_algo, do.call(getPreprocess, c(Ex1,Ex1_algo)))
+par <- c(list(ifPrint=1,testSize=50),Ex1,Ex1_algo)
+Ex1_result <- do.call(onlineModel, par)
+
+#Suppose that there is historical data
+newEx1 <- (function(N=20, D=2, L=8, ifPlot = TRUE){
+err <- matrix(rnorm(D*(N+L)), N+L, D)
+X <- err[ ,1]
+X <- cbind(X, 0.5 * utils.lag(X,1)^2 - 0.8 * utils.lag(X,7) + 0.2 * err[,2])
+list(N=N, D=D, L=L, X=X[-(1:L),], y=X[-(1:L),2])
+})()
+Ex1_new <- (function(experiment_config){
+ lambda <- 1/c(1:experiment_config$N) # same as batch
+ shrinkStepSize <- 1/c(1:experiment_config$N)
+ list(
+   order = 3,
+   nBspline = 10,
+   lambda = lambda,
+   shrinkStepSize = shrinkStepSize,
+   # if the performance does not exceed this ratio, the sparser (larger gamma) is preferred
+   spaTol_gamma = 1.1,
+   moveSize = 10^(0.4), # multipler to move among channels
+   safeShrink_gamma = 10^(0.1), # to adjust gamma before they get too crazy
+   gamma_init = 0.05, #lambda in the paper,three channel
+   alpha2_init = 0.05 #tao in the paper
+   )
+})(newEx1)
+Ex1_new <- c(Ex1_new, do.call(getPreprocess, c(newEx1, Ex1_new)))
+par <- c(list(ifPrint=1,testSize=50),newEx1,Ex1_new)
+#newsult <- do.call(onlineModel,par)
+}
 \seealso{
 \code{\link{glasso_EM}} for implementation of EM algorithm; \code{\link{getPreprocess}};\code{\link{getRegressor}}
 }

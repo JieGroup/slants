@@ -17,3 +17,9 @@ regressor value
 \description{
 This function is to calculate single value of regressor
 }
+\examples{
+knots = c(0,0,0,0.1)
+input = 0.02
+result = spval(input,knots)
+
+}
