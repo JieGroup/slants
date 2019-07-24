@@ -1,0 +1,5 @@
+# Don't cache and some test files
+.pytest_cache/
+__pycache__/
+test_functions/
+.ipynb_checkpoints/
