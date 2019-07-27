@@ -1,13 +1,13 @@
 #' glasso_EM
 #'
-#' This function is to implement the em algorithm for group lasso
+#' This function is to implement the EM algorithm for updating group lasso and sufficient statistics
 #'
 #' @param beta_init initial value
 #' @param A sufficient statistics, matrix
 #' @param B sufficient statistics
 #' @param ngroup number of groups
 #' @param lambda the LASSO penalty
-#' @param alpha2 the EM decomposition parameter, refer to the paper
+#' @param tau2 the EM decomposition parameter, refer to the paper
 #' @param ... default parameters
 #' @import methods
 #' @import graphics
@@ -19,22 +19,22 @@
 #' A = matrix(rep(c(1,2,3),3),nrow = 3,byrow = TRUE)
 #' ngroup = 3
 #' lambda = 0.05
-#' alpha2 = 0.05
-#' out = glasso_EM(beta,A,B,ngroup,lambda,alpha2)
+#' tau2 = 0.05
+#' out = glasso_EM(beta,A,B,ngroup,lambda,tau2)
 #'
 
 
 
 
 
-glasso_EM <- function(beta_init, A, B, ngroup, lambda, alpha2, ...) {
+glasso_EM <- function(beta_init, A, B, ngroup, lambda, tau2, ...) {
   ###
   # beta_init is the initial value
   # sufficient statistics A (matrix) and B (vector)
   # lambda is the LASSO penalty
   # ngroup is the number of groups, should be D*L in our setting
   # TODO: we currently only consider equal group size
-  # alpha2 is the EM decomposition parameter, refer to the paper
+  # tau2 is the EM decomposition parameter, refer to the paper
   # return a list, consisting of
   #   1) whether success
   #   2) the updated coefficients
@@ -72,10 +72,10 @@ glasso_EM <- function(beta_init, A, B, ngroup, lambda, alpha2, ...) {
   # iterate between old beta -> compute r -> shrink r (new beta)
   for (k in 1:K) {
     beta_old <- beta
-    r <- beta - alpha2 * A %*% beta + alpha2 * B
+    r <- beta - tau2 * A %*% beta + tau2 * B
     for (j in 1:ngroup) {
       group <- ((j-1)*gsize+1):(j*gsize)
-      temp <- alpha2 * lambda / sqrt(sum(r[group]^2))
+      temp <- tau2 * lambda / sqrt(sum(r[group]^2))
       if (temp<1) {
         beta[group] <- (1-temp)*r[group]
       } else {

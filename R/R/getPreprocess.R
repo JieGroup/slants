@@ -1,6 +1,6 @@
 #' get Preprocess
 #'
-#' This function preprocess the original data to get splines configuration and input data for b splines.
+#' This function preprocess the original data to get splines configuration and input data for getRegressor function.
 #'
 #' @param X The origianl input data.
 #' @param L The maximum lag.

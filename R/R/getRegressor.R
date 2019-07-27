@@ -1,6 +1,6 @@
 #' get Regressor
 #'
-#' This function preprocess the original data to get splines configuration and input data for b splines.
+#' This function calculate the input value for getSequential Nonlinear Model
 #'
 #' @param x input data, vector x
 #' @param d the index of which knots to look at

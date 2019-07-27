@@ -1,6 +1,6 @@
 #' positive.polynomial
 #'
-#' This function is to fit model
+#' This function works as truncated polynomial function
 #'
 #' @param t the input value
 #' @param x knots value

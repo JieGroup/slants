@@ -14,7 +14,6 @@
 #' nBspline = 10
 #' order = 3
 #' plotcoeff(beta,knots,nBspline,order)
-
 plotcoeff <- function(beta,knots,nBspline,order){
   D <- length(knots)
   DL <- length(beta)/nBspline
@@ -22,7 +21,7 @@ plotcoeff <- function(beta,knots,nBspline,order){
   tmp <- NULL
 
   for (i in 1:(length(knots)-order)) {
-    tmp <- cbind(tmp, sapply(seq(-1,1,by=0.01), spval, x=knots[i:(i+order)]))
+    tmp <- cbind(tmp, sapply(seq(-1,1,by=0.01), spval, knots=knots[i:(i+order)]))
   }
   result = matrix(nrow = DL,ncol = length(x))
   rownames(result) <- paste('lag',1:DL,sep='')
