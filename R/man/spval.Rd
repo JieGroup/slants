@@ -4,12 +4,12 @@
 \alias{spval}
 \title{divided difference}
 \usage{
-spval(t, x)
+spval(x, knots)
 }
 \arguments{
-\item{t}{input x value}
+\item{x}{input x value}
 
-\item{x}{knots}
+\item{knots}{knots}
 }
 \value{
 regressor value

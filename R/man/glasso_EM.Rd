@@ -4,7 +4,7 @@
 \alias{glasso_EM}
 \title{glasso_EM}
 \usage{
-glasso_EM(beta_init, A, B, ngroup, lambda, alpha2, ...)
+glasso_EM(beta_init, A, B, ngroup, lambda, tau2, ...)
 }
 \arguments{
 \item{beta_init}{initial value}
@@ -17,7 +17,7 @@ glasso_EM(beta_init, A, B, ngroup, lambda, alpha2, ...)
 
 \item{lambda}{the LASSO penalty}
 
-\item{alpha2}{the EM decomposition parameter, refer to the paper}
+\item{tau2}{the EM decomposition parameter, refer to the paper}
 
 \item{...}{default parameters}
 }
@@ -25,7 +25,7 @@ glasso_EM(beta_init, A, B, ngroup, lambda, alpha2, ...)
 a list of whether success and the updated coefficients
 }
 \description{
-This function is to implement the em algorithm for group lasso
+This function is to implement the EM algorithm for updating group lasso and sufficient statistics
 }
 \examples{
 beta = matrix(c(1,2,3))
@@ -33,7 +33,7 @@ B = matrix(c(1,2,3))
 A = matrix(rep(c(1,2,3),3),nrow = 3,byrow = TRUE)
 ngroup = 3
 lambda = 0.05
-alpha2 = 0.05
-out = glasso_EM(beta,A,B,ngroup,lambda,alpha2)
+tau2 = 0.05
+out = glasso_EM(beta,A,B,ngroup,lambda,tau2)
 
 }

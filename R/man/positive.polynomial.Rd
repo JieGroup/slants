@@ -21,7 +21,7 @@ positive.polynomial(t, x, k, end_knot, d = 0)
 a number of positive polynomial result
 }
 \description{
-This function is to fit model
+This function works as truncated polynomial function
 }
 \examples{
 positive.polynomial(0.2,x = 0,k = 3,end_knot = 2,d=0)

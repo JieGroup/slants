@@ -17,7 +17,7 @@ getRegressor(x, d, spconfig)
 a vector of regressor that will be passed to EM algorithm
 }
 \description{
-This function preprocess the original data to get splines configuration and input data for b splines.
+This function calculate the input value for getSequential Nonlinear Model
 }
 \examples{
 x =  matrix(rnorm(2*(1000+8)),1000+8, 2)

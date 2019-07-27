@@ -33,7 +33,7 @@ a list including
 }
 }
 \description{
-This function preprocess the original data to get splines configuration and input data for b splines.
+This function preprocess the original data to get splines configuration and input data for getRegressor function.
 }
 \examples{
 utils.lag <- function(ts, lag = 1, pad = NA) {

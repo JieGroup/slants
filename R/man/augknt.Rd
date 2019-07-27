@@ -11,8 +11,15 @@ augknt(boundary, nBspline, order)
 
 \item{nBspline}{number of b splines}
 
-\item{order}{order of polynomial}
+\item{order}{order of b spline function, indicates the degree n-1 of piecewise polynomial function}
 }
 \description{
-This function is to find the knot
+This function is used to find knots
+}
+\examples{
+boundary = c(0.1, 0.5)
+nBspline = 10
+order = 3
+print(augknt(boundary, nBspline, order))
+
 }

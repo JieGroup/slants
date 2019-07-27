@@ -4,8 +4,9 @@
 \alias{getSequentialNonlinearModel}
 \title{getSequentialNonlinearModel}
 \usage{
-getSequentialNonlinearModel(y, x, D, L, lambda, gamma_init, alpha2_init,
-  spconfig, spaTol_gamma, shrinkStepSize, moveSize, ...)
+getSequentialNonlinearModel(y, x, D, L, forget_factor, lambda_init,
+  tau2_init, spconfig, sparse_lambda_tolerance, shrinkStepSize,
+  delta_multiplier, ...)
 }
 \arguments{
 \item{y}{vector}
@@ -16,27 +17,27 @@ getSequentialNonlinearModel(y, x, D, L, lambda, gamma_init, alpha2_init,
 
 \item{L}{maximize lag number}
 
-\item{lambda}{the LASSO penalty}
+\item{forget_factor}{Comprises ideally decreasing weights in range [0,1] indicating the importance of past values (generally, less significance for older values)}
 
-\item{gamma_init}{the initial value for gamma}
+\item{lambda_init}{the initial value for lambda, LASSO penalty}
 
-\item{alpha2_init}{the initial value of EM decomposition parameter, refer to the paper}
+\item{tau2_init}{the initial value of EM decomposition parameter, refer to the paper}
 
 \item{spconfig}{spline configuration}
 
-\item{spaTol_gamma}{favor smaller gamma within spaTol_c tolerance}
+\item{sparse_lambda_tolerance}{favor smaller lambda within spaTol_c tolerance}
 
-\item{shrinkStepSize}{adjust gamma before they get too crazy}
+\item{shrinkStepSize}{adjust lambda before they get too crazy, recommended to be equal to 'forget_factor' vector values in case of confusion}
 
-\item{moveSize}{multipler to move among channels}
+\item{delta_multiplier}{multipler to move among channels}
 
 \item{...}{default parameters,including
  \itemize{
   \item testSize: the number of obs to average prediction error, default is 50
-  \item tol_idle_alpha2:increase alpha2 if it idles for a while
-  \item safeShrink_gamma : adjust gamma before they get too crazy
-  \item tol_all0times: if coefficents are all 0 for too long time, shrink gamma
-  \item shrinkAlpha2: how to shrink alpha2
+  \item tol_idle_tau2:increase tau2 if it idles for a while
+  \item safeShrink_lambda : adjust lambda before they get too crazy
+  \item tol_all0times: if coefficents are all 0 for too long time, shrink lambda
+  \item shrinktau2: how to shrink tau2
 }}
 }
 \value{
@@ -44,9 +45,9 @@ a list including
  \itemize{
   \item preErr: historical predicted error, firt column indicates the first channel, etc.
   \item predict1 : historical predicted values, firt column indicates the first channel, etc.
-  \item gamma_history : historical gamma channels, first channel is the smallest one and the third channel is the largest one.
-  \item gamma_opt: optimized gamma, the second channel in gamma_history
-  \item alpha_opt: optimized alpha
+  \item lambda_history : historical lambda channels, first channel is the smallest one and the third channel is the largest one.
+  \item lambda_opt: optimized lambda, the second channel in lambda_history
+  \item tau2_opt: optimized tau2
   \item beta_opt: best coefficient, the last row and the second channel related in beta_history
   \item beta_history: all stored coefficient.
 }
@@ -55,7 +56,7 @@ a list including
 This model is used to fit sequential non linear time series data. Detailed information could be find in the paper \url{http://jding.org/jie-uploads/2018/11/slant.pdf}
 }
 \details{
-This function is to fit seqential non linear model
+This function uses splines to approximate a wide range of nonlinear functions and adaptive filtering to accommodate time varying data generating processes.
 }
 \examples{
 utils.lag <- function(ts, lag = 1, pad = NA) {
@@ -75,28 +76,28 @@ Ex1 <- (function(N=2000, D=2, L=8, ifPlot = TRUE){
 
 Ex1_algo <- (function(experiment_config){
 ec <- experiment_config # short name
-lambda <- 1/c(1:ec$N) # same as batch
+forget_factor <- 1/c(1:ec$N) # same as batch
 shrinkStepSize <- 1/c(1:ec$N)
 list(
   order = 3,
   nBspline = 10,
-  lambda = lambda,
+  forget_factor = forget_factor,
   shrinkStepSize = shrinkStepSize,
-  # if the performance does not exceed this ratio, the sparser (larger gamma) is preferred
-  spaTol_gamma = 1.01,
-  moveSize = 10^(0.4), # multipler to move among channels
- safeShrink_gamma = 10^(0.1), # to adjust gamma before they get too crazy
-  gamma_init = 0.01,
-  alpha2_init = 0.05
+  # if the performance does not exceed this ratio, the sparser (larger lambda) is preferred
+  sparse_lambda_tolerance = 1.01,
+  delta_multiplier = 10^(0.4), # multipler to move among channels
+ safeShrink_lambda = 10^(0.1), # to adjust lambda before they get too crazy
+  lambda_init = 0.01,
+  tau2_init = 0.05
 )
 })(Ex1)
 
 Ex1_algo <- c(Ex1_algo, do.call(getPreprocess, c(Ex1,Ex1_algo)))
-par <- c(list(ifPrint=1,testSize=50),Ex1,Ex1_algo)
+par <- c(list(ifPrint=0,testSize=50),Ex1,Ex1_algo)
 Ex1_result <- do.call(getSequentialNonlinearModel, par)
 #========diagonistic========
-graphics::plot(Ex1_result$gamma_opt,type = "l")
-graphics::plot(Ex1_result$alpha_opt,type = "l",ylab = "Tao2")
+graphics::plot(Ex1_result$lambda_opt,type = "l")
+graphics::plot(Ex1_result$tau2_opt,type = "l",ylab = "Tao2")
 graphics::plot(Ex1_result$preErr[,2],type = "l")
 #get the historical opt beta, always the middle channel
 plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots[,1],Ex1_algo$spconfig$nBspline,Ex1_algo$spconfig$order)
