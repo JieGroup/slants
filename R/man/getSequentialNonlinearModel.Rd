@@ -59,6 +59,7 @@ This model is used to fit sequential non linear time series data. Detailed infor
 This function uses splines to approximate a wide range of nonlinear functions and adaptive filtering to accommodate time varying data generating processes.
 }
 \examples{
+\dontrun{
 utils.lag <- function(ts, lag = 1, pad = NA) {
 # return the lagged version of a time series vector
 return(c(rep(pad, lag), ts[1:(length(ts)-lag)]))
@@ -101,6 +102,7 @@ graphics::plot(Ex1_result$tau2_opt,type = "l",ylab = "Tao2")
 graphics::plot(Ex1_result$preErr[,2],type = "l")
 #get the historical opt beta, always the middle channel
 plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots[,1],Ex1_algo$spconfig$nBspline,Ex1_algo$spconfig$order)
+}
 }
 \seealso{
 \code{\link{glasso_EM}} for implementation of EM algorithm; \code{\link{getPreprocess}};\code{\link{getRegressor}}

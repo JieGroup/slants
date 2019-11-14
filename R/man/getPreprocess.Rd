@@ -42,7 +42,8 @@ return(c(rep(pad, lag), ts[1:(length(ts)-lag)]))
 }
 # pack configurations so that it is easier to bundle things together
 
-# Suppose that there is no historical data. In this situation, onlineModel has the same function as getSequentialNonlinearModel
+# Suppose that there is no historical data.
+# In this situation, onlineModel has the same function as getSequentialNonlinearModel
 Ex1 <- (function(N=2000, D=2, L=8, ifPlot = TRUE){
  err <- matrix(stats::rnorm(D*(N+L)), N+L, D)
  X <- err[ ,1]
