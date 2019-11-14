@@ -39,6 +39,7 @@
 #' @seealso \code{\link{glasso_EM}} for implementation of EM algorithm; \code{\link{getPreprocess}};\code{\link{getRegressor}}
 #' @keywords  sequential non linear time series model
 #' @examples
+#' \dontrun{
 #' utils.lag <- function(ts, lag = 1, pad = NA) {
 #' # return the lagged version of a time series vector
 #' return(c(rep(pad, lag), ts[1:(length(ts)-lag)]))
@@ -46,7 +47,8 @@
 
 #'# pack configurations so that it is easier to bundle things together
 #'
-#' # Suppose that there is no historical data. In this situation, onlineModel has the same function as getSequentialNonlinearModel
+#' # Suppose that there is no historical data.
+#' # In this situation, onlineModel has the same function as getSequentialNonlinearModel
 #' Ex1 <- (function(N=2000, D=2, L=8, ifPlot = TRUE){
 #'  err <- matrix(stats::rnorm(D*(N+L)), N+L, D)
 #'  X <- err[ ,1]
@@ -106,6 +108,7 @@
 #'Ex1_new <- c(Ex1_new, do.call(getPreprocess, c(newEx1, Ex1_new)))
 #'par <- c(list(ifPrint=1,testSize=50),newEx1,Ex1_new)
 #'#newsult <- do.call(onlineModel,par)
+#'}
 
 
 

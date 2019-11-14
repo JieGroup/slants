@@ -39,6 +39,7 @@
 #' @seealso \code{\link{glasso_EM}} for implementation of EM algorithm; \code{\link{getPreprocess}};\code{\link{getRegressor}}
 #' @keywords  sequential non linear time series model
 #' @examples
+#' \dontrun{
 #' utils.lag <- function(ts, lag = 1, pad = NA) {
 #' # return the lagged version of a time series vector
 #' return(c(rep(pad, lag), ts[1:(length(ts)-lag)]))
@@ -83,6 +84,7 @@
 #'graphics::plot(Ex1_result$preErr[,2],type = "l")
 #'#get the historical opt beta, always the middle channel
 #'plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots[,1],Ex1_algo$spconfig$nBspline,Ex1_algo$spconfig$order)
+#'}
 
 
 
