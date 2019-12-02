@@ -1,6 +1,6 @@
 # The 'slants' package
 
-This project repository provides software for the algorithm of Sequential Adaptive Nonlinear Modeling of Time Series developed by Jiaqi Liu and Rachit Jas. The work is an extension of a prior work of **Q. Han, J. Ding, E. M. Airoldi and V. Tarokh** in the IEEE Transactions on Signal Processing Journal, Vol. 65, NO. 19, October 2017. The open source project extends in several technical details to enhance prediction accuracy and computational efficiency. SLANTS provides a new method for online modeling and prediction of nonlinear and nonparametric autoregressive time series. 
+This project repository provides software for the algorithm of Sequential Adaptive Nonlinear Modeling of Time Series developed by Jiaqi Liu and Rachit Jas. The work is an extension of a prior work of Q. Han, J. Ding, E. M. Airoldi and V. Tarokh in the IEEE Transactions on Signal Processing Journal, Vol. 65, NO. 19, October 2017. The open source project extends in several technical details to enhance prediction accuracy and computational efficiency. SLANTS provides a new method for online modeling and prediction of nonlinear and nonparametric autoregressive time series. 
 
 ## Available Implementations
 
