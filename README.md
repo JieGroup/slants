@@ -18,7 +18,10 @@ At this time, the 'slants' API is available right out of the box to the general 
 
 Q .Han, J. Ding, E. Airoldi, V. Tarokh, "SLANTS: Sequential adaptive nonlinear modeling of time series," IEEE Transactions on Signal Processing 65 (19), 4994-5005. [[PDF](http://jding.org/jie-uploads/2018/11/slant.pdf)]
 
+J. Liu, J. Zhou, J. Ding, "Privacy aware supervised learning," preprint.
+
 X. Xian, J. Ding, "Physics-assisted online learning," preprint.
+
 
 
 ## License
