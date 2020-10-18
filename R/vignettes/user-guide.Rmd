@@ -59,16 +59,17 @@ All the tuning parameters have default values in the package.
 ```{r,eval=F}
 Ex1_algo <- (function(experiment_config){
   ec <- experiment_config # short name
-  lambda <- 1/c(1:ec$N) # same as batch
+  forget_factor <- 1/c(1:ec$N) # same as batch
   shrinkStepSize <- 1/c(1:ec$N)
   list(
     order = 3,
     nBspline = 10,
-    lambda = lambda,
+    forget_factor = forget_factor,
     shrinkStepSize = shrinkStepSize,
     # if the performance does not exceed this ratio, the sparser (larger gamma) is preferred
     spaTol_gamma = 1.1,
     moveSize = 10^(0.4), # multipler to move among channels
+    delta_multiplier = 10^(0.4), # multipler to move among channels
     safeShrink_gamma = 10^(0.1), # to adjust gamma before they get too crazy
     gamma_init = 0.0001, #lambda in the paper,three channel
     alpha2_init = 0.05 #tao in the paper
@@ -89,12 +90,12 @@ Ex1_result <- do.call(getSequentialNonlinearModel, c(list(ifPrint=TRUE, testSize
 Users can visualize the evolution of various tuning patameters.
 
 ```{r,fig.width=5, fig.height=3,eval=F}
-plot(Ex1_result$gamma_opt,type = "l")
-plot(Ex1_result$alpha_opt,type = "l",ylab = "Tao2")
+plot(Ex1_result$lambda_opt,type = "l")
+plot(Ex1_result$tau2_opt,type = "l",ylab = "Tau2")
 ```
 
 Users can also visualize the marginal relation between the response $y$ and each active predictor $X$.
 ```{r,fig.width=5, fig.height=3,eval=F}
-plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots,Ex1_algo$nBspline)
+plotcoeff(Ex1_result$beta_opt,Ex1_algo$knots[,1],Ex1_algo$nBspline,Ex1_algo$order)
 ```
 
